@@ -7,7 +7,7 @@
 
 // システム設定
 const CONFIG = {
-  GAS_WEB_APP_URL: "https://script.google.com/macros/s/AKfycbzen1XyzC4UBftuKiygAynoORYg9Hs-cJLctOW553FfPyT9tPVSklZQwB61LqjKv31K/exec",
+  GAS_WEB_APP_URL: "https://script.google.com/macros/s/AKfycbymPQ8J-sqZZqJgEuS6gmkvZYKAcULexUTq4mZSE42negBFPh2Kvs3az6lISH25WhfC/exec",
   STORAGE_FIELDS: ["name", "name_kana", "tel", "email"],
   STORAGE_PREFIX: "sis_",
 
@@ -35,7 +35,7 @@ const CONFIG = {
   // フッターのコピーライト表記内のリンク（文言・リンク先）
   // GAS側の設定は経由せず、ここを直接書き換えて変更する
   COPYRIGHT_LINK_TEXT: "Works",
-  COPYRIGHT_LINK_URL: "https://simozuru.github.io/sis/#"
+  COPYRIGHT_LINK_URL: "https://simozuru.github.io/SIS-dev/#"
 };
 
 // 画面全体で共有する状態

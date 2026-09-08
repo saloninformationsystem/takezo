@@ -75,6 +75,7 @@
       <button type="button" class="tab-btn" data-tab="settings4">スタッフ</button>
       <button type="button" class="tab-btn" data-tab="settings2">メール</button>
       <button type="button" class="tab-btn" data-tab="settings3">レイアウト</button>
+      <button type="button" class="tab-btn" data-tab="pages">ページ編集</button>
       <button type="button" class="tab-btn" data-tab="accounts">アカウント</button>
     </nav>
     <div class="header-right">
@@ -691,6 +692,43 @@
       </div>
     </section>
 
+    <section id="tab-pages" class="tab-page" style="display: none;">
+      <h2 class="section-title">ページ編集</h2>
+
+      <div id="page-edit-loading" class="settings-loading">読み込み中...</div>
+      <div id="page-edit-error" class="report-error" style="display: none;"></div>
+      <div id="page-edit-saved-msg" class="settings-saved-msg" style="display: none;">保存しました。</div>
+
+      <form id="page-edit-form" style="display: none;">
+        <div class="settings-card">
+          <div class="form-group">
+            <label for="page-edit-page-select">編集するページ</label>
+            <p class="settings-card-note">トップページ下の「Information」カード(レイアウトタブで設定)をクリックすると開く、4つの紹介ページの本文です。HTMLの知識がなくても、下の入力欄に直接文章を書くだけで編集できます。</p>
+            <select id="page-edit-page-select" data-current="1">
+              <option value="1">ページ1</option>
+              <option value="2">ページ2</option>
+              <option value="3">ページ3</option>
+              <option value="4">ページ4</option>
+            </select>
+          </div>
+
+          <div class="page-editor-toolbar">
+            <button type="button" data-cmd="bold" title="太字"><b>B</b></button>
+            <button type="button" data-cmd="italic" title="斜体"><i>I</i></button>
+            <button type="button" data-cmd="formatBlock" data-value="h3" title="見出し">見出し</button>
+            <button type="button" data-cmd="formatBlock" data-value="p" title="標準の文章">標準</button>
+            <button type="button" data-cmd="insertUnorderedList" title="箇条書き">・箇条書き</button>
+            <button type="button" data-cmd="createLink" title="リンクを挿入">🔗リンク</button>
+            <button type="button" id="page-edit-image-btn" title="画像を挿入">🖼️画像</button>
+            <input type="file" id="page-edit-image-input" accept="image/*" style="display: none;">
+          </div>
+          <div id="page-editor" class="page-editor-body" contenteditable="true"></div>
+        </div>
+
+        <button type="submit" id="save-page-content-btn" class="btn-save-settings">保存する</button>
+      </form>
+    </section>
+
     <section id="tab-retention" class="tab-page" style="display: none;">
       <h2 class="section-title">保存期間</h2>
 
@@ -779,6 +817,7 @@
 <script src="./js/admin-core.js?v=1.0.0"></script>
 <script src="./js/admin-reports.js?v=1.0.0"></script>
 <script src="./js/admin-settings.js?v=1.0.0"></script>
+<script src="./js/admin-pages.js?v=1.0.0"></script>
 <script src="./js/admin-accounts.js?v=1.0.0"></script>
 
 </body>

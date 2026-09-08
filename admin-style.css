@@ -1324,3 +1324,90 @@ font-size: 13px;
 .btn-i18n-toggle:hover {
 background-color: var(--bg-color);
 }
+
+/* ==========================================================
+ページ編集タブ：文章エディタ（ツールバー＋contenteditable本文）
+========================================================== */
+
+.page-editor-toolbar {
+display: flex;
+flex-wrap: wrap;
+
+gap: 6px;
+
+margin-bottom: 8px;
+
+padding: 8px;
+
+background-color: var(--bg-color);
+
+border: 1px solid var(--border-color);
+
+border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.page-editor-toolbar button {
+padding: 6px 12px;
+
+border: 1px solid var(--border-color);
+
+border-radius: var(--radius-sm);
+
+background-color: var(--card-bg);
+
+cursor: pointer;
+
+font-size: 13px;
+}
+
+.page-editor-toolbar button:hover {
+background-color: var(--bg-color);
+}
+
+.page-editor-body {
+min-height: 320px;
+
+padding: 16px;
+
+border: 1px solid var(--border-color);
+border-top: none;
+
+border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+
+background-color: #ffffff;
+
+font-size: 14px;
+line-height: 1.8;
+
+overflow-y: auto;
+}
+
+.page-editor-body:focus {
+outline: 2px solid var(--primary-color);
+outline-offset: -2px;
+}
+
+.page-editor-body img {
+max-width: 100%;
+
+border-radius: var(--radius-sm);
+
+margin: 8px 0;
+}
+
+.page-editor-body h1,
+.page-editor-body h2,
+.page-editor-body h3 {
+margin: 12px 0 8px;
+
+color: var(--primary-color);
+}
+
+.page-editor-body p {
+margin: 0 0 10px;
+}
+
+.page-editor-body ul,
+.page-editor-body ol {
+margin: 0 0 10px 20px;
+}

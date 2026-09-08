@@ -268,6 +268,9 @@ if (tabButtons) {
       if (targetTab === 'retention' && !retentionLoaded) {
         loadRetentionSettings();
       }
+      if (targetTab === 'pages' && !pageEditLoaded) {
+        loadPageContents();
+      }
     });
   });
 }

@@ -124,6 +124,7 @@ const I18N_STRINGS = {
     err_process_failed_prefix: "処理に失敗しました: ",
     err_page_load_failed: "ページの読み込みに失敗しました。時間をおいて再度お試しください。",
     page_loading: "読み込み中...",
+    page_loading_empty: "まだ内容が登録されていません。",
 
     // 予約送信の確認・完了メッセージ
     confirm_change_reservation: "選択した新しい日時で予約を変更してもよろしいですか？",
@@ -279,6 +280,7 @@ const I18N_STRINGS = {
     err_process_failed_prefix: "Processing failed: ",
     err_page_load_failed: "Failed to load the page. Please try again later.",
     page_loading: "Loading...",
+    page_loading_empty: "No content has been added yet.",
 
     confirm_change_reservation: "Are you sure you want to change your reservation to the new date/time selected?",
     confirm_change_provisional: "Changing to this new date/time will make this a <span class=\"custom-confirm-highlight\">provisional reservation</span>. Is that OK?",
@@ -428,6 +430,7 @@ const I18N_STRINGS = {
     err_process_failed_prefix: "처리에 실패했습니다: ",
     err_page_load_failed: "페이지를 불러오는 데 실패했습니다. 잠시 후 다시 시도해주세요.",
     page_loading: "불러오는 중...",
+    page_loading_empty: "아직 등록된 내용이 없습니다.",
 
     confirm_change_reservation: "선택하신 새로운 일시로 예약을 변경하시겠습니까？",
     confirm_change_provisional: "선택하신 내용으로 변경하면 <span class=\"custom-confirm-highlight\">임시 예약</span>이 됩니다. 계속하시겠습니까？",
@@ -577,6 +580,7 @@ const I18N_STRINGS = {
     err_process_failed_prefix: "处理失败：",
     err_page_load_failed: "页面加载失败，请稍后重试。",
     page_loading: "加载中...",
+    page_loading_empty: "尚未添加内容。",
 
     confirm_change_reservation: "确定要将预约变更为所选的新日期时间吗？",
     confirm_change_provisional: "变更为所选内容后，将成为<span class=\"custom-confirm-highlight\">临时预约</span>。是否继续？",
@@ -726,6 +730,7 @@ const I18N_STRINGS = {
     err_process_failed_prefix: "處理失敗：",
     err_page_load_failed: "頁面載入失敗，請稍後再試。",
     page_loading: "載入中...",
+    page_loading_empty: "尚未新增內容。",
 
     confirm_change_reservation: "確定要將預約變更為所選的新日期時間嗎？",
     confirm_change_provisional: "變更為所選內容後，將成為<span class=\"custom-confirm-highlight\">臨時預約</span>。是否繼續？",
@@ -875,6 +880,7 @@ const I18N_STRINGS = {
     err_process_failed_prefix: "Échec du traitement : ",
     err_page_load_failed: "Échec du chargement de la page. Veuillez réessayer plus tard.",
     page_loading: "Chargement...",
+    page_loading_empty: "Aucun contenu n'a encore été ajouté.",
 
     confirm_change_reservation: "Confirmez-vous la modification de votre réservation à la nouvelle date/heure sélectionnée ?",
     confirm_change_provisional: "Ce changement fera de votre réservation une <span class=\"custom-confirm-highlight\">réservation provisoire</span>. Confirmez-vous ?",

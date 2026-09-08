@@ -375,10 +375,12 @@ async function loadPageFragment(pageNumber) {
   showSection(pageFragmentContainer);
 
   try {
-    const response = await fetch(`./pages/page${pageNumber}.html`);
-    if (!response.ok) throw new Error(`page${pageNumber}.html が見つかりません`);
-    const html = await response.text();
-    pageFragmentContent.innerHTML = html;
+    const url = `${CONFIG.GAS_WEB_APP_URL}?method=getPageContent&page=${encodeURIComponent(pageNumber)}`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`ページ${pageNumber}の取得に失敗しました`);
+    const result = await response.json();
+    if (!result.success) throw new Error(result.message || 'ページの取得に失敗しました');
+    pageFragmentContent.innerHTML = result.content || `<div class="no-data">${t('page_loading_empty')}</div>`;
   } catch (error) {
     console.error('ページ断片の読み込みエラー:', error);
     pageFragmentContent.innerHTML = `<div class="no-data text-danger">${t('err_page_load_failed')}</div>`;
