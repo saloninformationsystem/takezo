@@ -971,7 +971,7 @@ async function loadSettings2() {
     // 来店後のお礼メール（口コミ・クチコミ導線）
     const thankYouMail = result.thankYouMail || {};
     if (s2ThankYouEnabled) s2ThankYouEnabled.checked = !!thankYouMail.enabled;
-    if (s2ThankYouDays) s2ThankYouDays.value = thankYouMail.daysAfterVisit || '';
+    if (s2ThankYouDays) s2ThankYouDays.value = (thankYouMail.daysAfterVisit === null || typeof thankYouMail.daysAfterVisit === 'undefined') ? '' : thankYouMail.daysAfterVisit;
     if (s2ThankYouHeader) s2ThankYouHeader.value = thankYouMail.header || '';
     if (s2ThankYouFooter) s2ThankYouFooter.value = thankYouMail.footer || '';
     if (s2ThankYouReviewUrl) s2ThankYouReviewUrl.value = thankYouMail.reviewUrl || '';
@@ -1143,11 +1143,16 @@ function buildInfoI18nPanelHtml(i18nValues) {
  * @param {Array} items - 既存のカード設定（0〜4件）
  */
 function renderInfoItemRows(items) {
-  if (!infoItemRows) return;
+  const containers = [
+    document.getElementById('page-info-card-1'),
+    document.getElementById('page-info-card-2'),
+    document.getElementById('page-info-card-3'),
+    document.getElementById('page-info-card-4')
+  ];
+  if (containers.some(c => !c)) return;
 
   const iconOptionsHtml = INFO_ICON_OPTIONS.map(opt => `<option value="${opt.value}">${opt.label}</option>`).join('');
 
-  let html = '';
   for (let i = 0; i < 4; i++) {
     const item = items[i] || {};
     const isUrlType = !!item.url && !item.page;
@@ -1155,9 +1160,9 @@ function renderInfoItemRows(items) {
     const iconValue = item.icon || '';
     const isIconUrlType = /^https?:\/\//i.test(iconValue);
 
-    html += `
+    containers[i].innerHTML = `
       <div class="info-item-block" data-slot="${i}">
-        <div class="info-item-block-title">カード${i + 1}（空欄のままなら、このカードは表示されません）</div>
+        <div class="info-item-block-title">Informationカード（空欄のままなら、このカードは表示されません）</div>
 
         <div class="form-group checkbox-group">
           <label><input type="checkbox" class="info-show-icon-check" ${showIcon ? 'checked' : ''}> アイコンを使う</label>
@@ -1214,14 +1219,13 @@ function renderInfoItemRows(items) {
       </div>
     `;
   }
-  infoItemRows.innerHTML = html;
 
-  // 翻訳パネルの開閉・Google翻訳リンクの更新
-  infoItemRows.querySelectorAll('.btn-info-i18n-toggle').forEach(btn => {
+  // 翻訳パネルの開閉・Google翻訳リンクの更新（カードは4つの別コンテナに分かれているので、ドキュメント全体から探す）
+  document.querySelectorAll('.btn-info-i18n-toggle').forEach(btn => {
     btn.addEventListener('click', () => {
       const slot = btn.getAttribute('data-slot');
-      const block = infoItemRows.querySelector(`.info-item-block[data-slot="${slot}"]`);
-      const panel = infoItemRows.querySelector(`.info-i18n-panel[data-slot="${slot}"]`);
+      const block = document.querySelector(`.info-item-block[data-slot="${slot}"]`);
+      const panel = document.querySelector(`.info-i18n-panel[data-slot="${slot}"]`);
       if (!block || !panel) return;
 
       const titleVal = block.querySelector('.info-title-input').value.trim();
@@ -1233,12 +1237,12 @@ function renderInfoItemRows(items) {
 
   // 読み込んだアイコンの選択状態を反映する（HTML文字列にselectedを埋め込むより、後からJSで設定する方が安全）
   items.forEach((item, i) => {
-    const select = infoItemRows.querySelector(`.info-item-block[data-slot="${i}"] .info-icon-select`);
+    const select = document.querySelector(`.info-item-block[data-slot="${i}"] .info-icon-select`);
     if (select && item.icon && !/^https?:\/\//i.test(item.icon)) select.value = item.icon;
   });
 
   // 「アイコンを使う」チェックの切り替えで、アイコン設定エリア自体を表示・非表示にする
-  infoItemRows.querySelectorAll('.info-show-icon-check').forEach(check => {
+  document.querySelectorAll('.info-show-icon-check').forEach(check => {
     check.addEventListener('change', () => {
       const settingsArea = check.closest('.info-item-block').querySelector('.info-icon-settings');
       if (settingsArea) settingsArea.style.display = check.checked ? 'block' : 'none';
@@ -1246,7 +1250,7 @@ function renderInfoItemRows(items) {
   });
 
   // 「プリセット / 画像URL」の切り替えで、該当する入力欄だけを表示する
-  infoItemRows.querySelectorAll('.info-item-block').forEach(block => {
+  document.querySelectorAll('.info-item-block').forEach(block => {
     const presetGroup = block.querySelector('.info-icon-preset-group');
     const imageGroup = block.querySelector('.info-icon-image-group');
     block.querySelectorAll('input[type="radio"][name^="info-icon-type-"]').forEach(radio => {
@@ -1261,6 +1265,26 @@ function renderInfoItemRows(items) {
       });
     });
   });
+}
+
+/**
+ * 情報セクション（enabled・見出し・4枚のカード）の設定値を、保存用の形にまとめる
+ * 「レイアウト」タブ・「ページ編集」タブ、両方の保存処理から呼ばれる共通ヘルパー
+ * （見出し・enabledの入力欄は「レイアウト」タブにあるが、DOM上に存在してさえいれば
+ * 　現在の値を読み取れるので、どちらのタブから呼んでも同じ結果になる）
+ * @returns {Object} INFO_SECTION の値
+ */
+function buildInfoSectionSettings() {
+  return {
+    enabled: !!(s3InfoEnabled && s3InfoEnabled.checked),
+    heading: {
+      text: (s3InfoHeading ? s3InfoHeading.value.trim() : '') || null,
+      fontSize: (s3InfoHeadingFontSize ? s3InfoHeadingFontSize.value.trim() : '') || null,
+      color: (s3InfoHeadingColor ? s3InfoHeadingColor.value.trim() : '') || null,
+      fontFamily: (s3InfoHeadingFontFamily ? s3InfoHeadingFontFamily.value.trim() : '') || null
+    },
+    items: collectInfoItems()
+  };
 }
 
 if (settings3Form) {
@@ -1302,16 +1326,7 @@ if (settings3Form) {
         HEADER_CONTACT_INFO: headerContactInfo,
         HOME_PAGE_URL: s3HomeUrl.value.trim() || null,
         HOME_PAGE_LABEL: s3HomeLabel.value.trim() || null,
-        INFO_SECTION: {
-          enabled: !!s3InfoEnabled.checked,
-          heading: {
-            text: s3InfoHeading.value.trim() || null,
-            fontSize: s3InfoHeadingFontSize.value.trim() || null,
-            color: s3InfoHeadingColor.value.trim() || null,
-            fontFamily: s3InfoHeadingFontFamily.value.trim() || null
-          },
-          items: collectInfoItems()
-        }
+        INFO_SECTION: buildInfoSectionSettings()
       };
 
       const token = sessionStorage.getItem(SESSION_TOKEN_KEY) || '';

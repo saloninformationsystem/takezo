@@ -194,7 +194,6 @@ const s3InfoHeading = document.getElementById('s3-info-heading');
 const s3InfoHeadingFontSize = document.getElementById('s3-info-heading-font-size');
 const s3InfoHeadingColor = document.getElementById('s3-info-heading-color');
 const s3InfoHeadingFontFamily = document.getElementById('s3-info-heading-font-family');
-const infoItemRows = document.getElementById('info-item-rows');
 const saveSettings3Btn = document.getElementById('save-settings3-btn');
 
 /**

@@ -1395,6 +1395,16 @@ border-radius: var(--radius-sm);
 margin: 8px 0;
 }
 
+.page-editor-body iframe {
+max-width: 100%;
+
+border-radius: var(--radius-sm);
+
+margin: 8px 0;
+
+border: 1px solid var(--border-color);
+}
+
 .page-editor-body h1,
 .page-editor-body h2,
 .page-editor-body h3 {
@@ -1410,4 +1420,45 @@ margin: 0 0 10px;
 .page-editor-body ul,
 .page-editor-body ol {
 margin: 0 0 10px 20px;
+}
+
+/* ==========================================================
+ページ編集タブ：ページ切り替え用のサブタブ
+========================================================== */
+
+.page-sub-tabs {
+display: flex;
+flex-wrap: wrap;
+
+gap: 4px;
+
+margin-bottom: 16px;
+
+border-bottom: 1px solid var(--border-color);
+}
+
+.page-sub-tab-btn {
+padding: 8px 20px;
+
+background: none;
+
+border: none;
+border-bottom: 3px solid transparent;
+
+color: var(--sub-text-color);
+
+font-size: 14px;
+font-weight: 600;
+
+cursor: pointer;
+}
+
+.page-sub-tab-btn.active {
+color: var(--accent-color);
+
+border-bottom-color: var(--accent-color);
+}
+
+.page-sub-tab-btn:hover {
+color: var(--accent-dark);
 }

@@ -536,7 +536,8 @@
           </div>
           <div class="form-group">
             <label for="s2-thankyou-days">来店日から何日後に送るか</label>
-            <input type="number" id="s2-thankyou-days" min="1" placeholder="例：1">
+            <p class="settings-card-note">0を入力すると、来店当日に送信します。</p>
+            <input type="number" id="s2-thankyou-days" min="0" placeholder="例：1">
           </div>
           <div class="form-group">
             <label for="s2-thankyou-header">本文（書き出し）</label>
@@ -644,8 +645,6 @@
             <p class="settings-card-note">「丸ゴシック」「明朝」「ゴシック」という言葉で入力すると、それらしいフォントを自動で読み込んで表示します。それ以外に、実在するフォント名（例：serif、'Yu Mincho', sans-serif）を直接指定することもできます。</p>
             <input type="text" id="s3-info-heading-font-family" placeholder="例：丸ゴシック（未入力で標準フォント）">
           </div>
-
-          <div id="info-item-rows"></div>
         </div>
 
         <button type="submit" id="save-settings3-btn" class="btn-save-settings">保存する</button>
@@ -694,35 +693,103 @@
 
     <section id="tab-pages" class="tab-page" style="display: none;">
       <h2 class="section-title">ページ編集</h2>
+      <p class="settings-card-note">トップページ下の「Information」カード(タイトル・説明文・アイコン・リンク先)と、そのカードをクリックした先に表示する本文を、ページごとにまとめて編集できます。下の入力欄に直接文章を書くだけで編集できます。</p>
 
       <div id="page-edit-loading" class="settings-loading">読み込み中...</div>
       <div id="page-edit-error" class="report-error" style="display: none;"></div>
       <div id="page-edit-saved-msg" class="settings-saved-msg" style="display: none;">保存しました。</div>
 
-      <form id="page-edit-form" style="display: none;">
-        <div class="settings-card">
-          <div class="form-group">
-            <label for="page-edit-page-select">編集するページ</label>
-            <p class="settings-card-note">トップページ下の「Information」カード(レイアウトタブで設定)をクリックすると開く、4つの紹介ページの本文です。HTMLの知識がなくても、下の入力欄に直接文章を書くだけで編集できます。</p>
-            <select id="page-edit-page-select" data-current="1">
-              <option value="1">ページ1</option>
-              <option value="2">ページ2</option>
-              <option value="3">ページ3</option>
-              <option value="4">ページ4</option>
-            </select>
-          </div>
+      <div class="page-sub-tabs">
+        <button type="button" class="page-sub-tab-btn active" data-page-sub="1">1ページ</button>
+        <button type="button" class="page-sub-tab-btn" data-page-sub="2">2ページ</button>
+        <button type="button" class="page-sub-tab-btn" data-page-sub="3">3ページ</button>
+        <button type="button" class="page-sub-tab-btn" data-page-sub="4">4ページ</button>
+      </div>
 
-          <div class="page-editor-toolbar">
-            <button type="button" data-cmd="bold" title="太字"><b>B</b></button>
-            <button type="button" data-cmd="italic" title="斜体"><i>I</i></button>
-            <button type="button" data-cmd="formatBlock" data-value="h3" title="見出し">見出し</button>
-            <button type="button" data-cmd="formatBlock" data-value="p" title="標準の文章">標準</button>
-            <button type="button" data-cmd="insertUnorderedList" title="箇条書き">・箇条書き</button>
-            <button type="button" data-cmd="createLink" title="リンクを挿入">🔗リンク</button>
-            <button type="button" id="page-edit-image-btn" title="画像を挿入">🖼️画像</button>
-            <input type="file" id="page-edit-image-input" accept="image/*" style="display: none;">
+      <form id="page-edit-form" style="display: none;">
+
+        <div class="page-sub-panel" data-page-sub-panel="1">
+          <div class="settings-card">
+            <div id="page-info-card-1"></div>
           </div>
-          <div id="page-editor" class="page-editor-body" contenteditable="true"></div>
+          <div class="settings-card">
+            <h3 class="settings-card-title">本文</h3>
+            <div class="page-editor-toolbar">
+              <button type="button" data-cmd="bold" title="太字"><b>B</b></button>
+              <button type="button" data-cmd="italic" title="斜体"><i>I</i></button>
+              <button type="button" data-cmd="formatBlock" data-value="h3" title="見出し">見出し</button>
+              <button type="button" data-cmd="formatBlock" data-value="p" title="標準の文章">標準</button>
+              <button type="button" data-cmd="insertUnorderedList" title="箇条書き">・箇条書き</button>
+              <button type="button" data-cmd="createLink" title="リンクを挿入">🔗リンク</button>
+              <button type="button" class="page-edit-image-btn" data-editor-target="page-editor-1" title="画像を挿入">🖼️画像</button>
+              <input type="file" class="page-edit-image-input" data-editor-target="page-editor-1" accept="image/*" style="display: none;">
+              <button type="button" class="page-edit-map-btn" data-editor-target="page-editor-1" title="Googleマップを埋め込む">🗺️地図</button>
+            </div>
+            <div id="page-editor-1" class="page-editor-body" contenteditable="true"></div>
+          </div>
+        </div>
+
+        <div class="page-sub-panel" data-page-sub-panel="2" style="display: none;">
+          <div class="settings-card">
+            <div id="page-info-card-2"></div>
+          </div>
+          <div class="settings-card">
+            <h3 class="settings-card-title">本文</h3>
+            <div class="page-editor-toolbar">
+              <button type="button" data-cmd="bold" title="太字"><b>B</b></button>
+              <button type="button" data-cmd="italic" title="斜体"><i>I</i></button>
+              <button type="button" data-cmd="formatBlock" data-value="h3" title="見出し">見出し</button>
+              <button type="button" data-cmd="formatBlock" data-value="p" title="標準の文章">標準</button>
+              <button type="button" data-cmd="insertUnorderedList" title="箇条書き">・箇条書き</button>
+              <button type="button" data-cmd="createLink" title="リンクを挿入">🔗リンク</button>
+              <button type="button" class="page-edit-image-btn" data-editor-target="page-editor-2" title="画像を挿入">🖼️画像</button>
+              <input type="file" class="page-edit-image-input" data-editor-target="page-editor-2" accept="image/*" style="display: none;">
+              <button type="button" class="page-edit-map-btn" data-editor-target="page-editor-2" title="Googleマップを埋め込む">🗺️地図</button>
+            </div>
+            <div id="page-editor-2" class="page-editor-body" contenteditable="true"></div>
+          </div>
+        </div>
+
+        <div class="page-sub-panel" data-page-sub-panel="3" style="display: none;">
+          <div class="settings-card">
+            <div id="page-info-card-3"></div>
+          </div>
+          <div class="settings-card">
+            <h3 class="settings-card-title">本文</h3>
+            <div class="page-editor-toolbar">
+              <button type="button" data-cmd="bold" title="太字"><b>B</b></button>
+              <button type="button" data-cmd="italic" title="斜体"><i>I</i></button>
+              <button type="button" data-cmd="formatBlock" data-value="h3" title="見出し">見出し</button>
+              <button type="button" data-cmd="formatBlock" data-value="p" title="標準の文章">標準</button>
+              <button type="button" data-cmd="insertUnorderedList" title="箇条書き">・箇条書き</button>
+              <button type="button" data-cmd="createLink" title="リンクを挿入">🔗リンク</button>
+              <button type="button" class="page-edit-image-btn" data-editor-target="page-editor-3" title="画像を挿入">🖼️画像</button>
+              <input type="file" class="page-edit-image-input" data-editor-target="page-editor-3" accept="image/*" style="display: none;">
+              <button type="button" class="page-edit-map-btn" data-editor-target="page-editor-3" title="Googleマップを埋め込む">🗺️地図</button>
+            </div>
+            <div id="page-editor-3" class="page-editor-body" contenteditable="true"></div>
+          </div>
+        </div>
+
+        <div class="page-sub-panel" data-page-sub-panel="4" style="display: none;">
+          <div class="settings-card">
+            <div id="page-info-card-4"></div>
+          </div>
+          <div class="settings-card">
+            <h3 class="settings-card-title">本文</h3>
+            <div class="page-editor-toolbar">
+              <button type="button" data-cmd="bold" title="太字"><b>B</b></button>
+              <button type="button" data-cmd="italic" title="斜体"><i>I</i></button>
+              <button type="button" data-cmd="formatBlock" data-value="h3" title="見出し">見出し</button>
+              <button type="button" data-cmd="formatBlock" data-value="p" title="標準の文章">標準</button>
+              <button type="button" data-cmd="insertUnorderedList" title="箇条書き">・箇条書き</button>
+              <button type="button" data-cmd="createLink" title="リンクを挿入">🔗リンク</button>
+              <button type="button" class="page-edit-image-btn" data-editor-target="page-editor-4" title="画像を挿入">🖼️画像</button>
+              <input type="file" class="page-edit-image-input" data-editor-target="page-editor-4" accept="image/*" style="display: none;">
+              <button type="button" class="page-edit-map-btn" data-editor-target="page-editor-4" title="Googleマップを埋め込む">🗺️地図</button>
+            </div>
+            <div id="page-editor-4" class="page-editor-body" contenteditable="true"></div>
+          </div>
         </div>
 
         <button type="submit" id="save-page-content-btn" class="btn-save-settings">保存する</button>

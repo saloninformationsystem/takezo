@@ -1831,3 +1831,25 @@ color: #ffffff;
 .btn-confirm-ok:hover {
 opacity: 0.85;
 }
+
+/* ==========================================================
+Information：紹介ページ本文（管理画面「ページ編集」タブで編集した内容）
+========================================================== */
+
+#page-fragment-content img {
+max-width: 100%;
+
+border-radius: var(--radius-sm);
+
+margin: 8px 0;
+}
+
+#page-fragment-content iframe {
+max-width: 100%;
+
+border-radius: var(--radius-sm);
+
+margin: 8px 0;
+
+border: 1px solid var(--border-color);
+}

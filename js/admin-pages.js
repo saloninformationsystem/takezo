@@ -1,8 +1,9 @@
 /**
  * =================================================================
- * Salon Information System (SIS) - js/admin-pages.js [Version 1.0.0]
- * [役割: 管理画面「ページ編集」タブ（4つの紹介ページの本文編集・画像アップロード）]
- * 読み込み順: admin-core.js の後に読み込むこと
+ * Salon Information System (SIS) - js/admin-pages.js [Version 2.0.0]
+ * [役割: 管理画面「ページ編集」タブ（Informationカードの内容＋本文を、ページごとにまとめて編集）]
+ * 読み込み順: admin-core.js・admin-settings.js の後に読み込むこと
+ * （buildInfoSectionSettings・renderInfoItemRows・collectInfoItems はadmin-settings.js側の関数）
  * =================================================================
  */
 
@@ -10,17 +11,14 @@ const pageEditLoading = document.getElementById('page-edit-loading');
 const pageEditError = document.getElementById('page-edit-error');
 const pageEditSavedMsg = document.getElementById('page-edit-saved-msg');
 const pageEditForm = document.getElementById('page-edit-form');
-const pageEditPageSelect = document.getElementById('page-edit-page-select');
-const pageEditor = document.getElementById('page-editor');
-const pageEditImageBtn = document.getElementById('page-edit-image-btn');
-const pageEditImageInput = document.getElementById('page-edit-image-input');
 const savePageContentBtn = document.getElementById('save-page-content-btn');
 
 let pageEditLoaded = false;
 let pageContentsCache = {};
 
 /**
- * 「ページ編集」タブを開いた時に、4ページ分の本文をまとめて読み込む
+ * 「ページ編集」タブを開いた時に、Informationカードの内容（レイアウトタブと共通）と、
+ * 4ページ分の本文を、まとめて読み込む
  */
 async function loadPageContents() {
   if (pageEditLoading) pageEditLoading.style.display = 'block';
@@ -28,17 +26,25 @@ async function loadPageContents() {
   if (pageEditForm) pageEditForm.style.display = 'none';
 
   try {
+    // Informationカードの内容（レイアウトタブがまだ開かれていない場合のみ、ここで読み込む）
+    if (!settings3Loaded) {
+      await loadSettings3();
+    }
+
+    // 4ページ分の本文
     const result = await callAdminApi('getPageContents');
     if (!result.success) throw new Error(result.message || 'ページ本文の取得に失敗しました。');
 
     pageContentsCache = result.pageContents || {};
-    if (pageEditPageSelect) pageEditPageSelect.setAttribute('data-current', pageEditPageSelect.value || '1');
-    _renderCurrentPageIntoEditor();
+    for (let i = 1; i <= 4; i++) {
+      const editor = document.getElementById(`page-editor-${i}`);
+      if (editor) editor.innerHTML = pageContentsCache[String(i)] || '';
+    }
 
     pageEditLoaded = true;
     if (pageEditForm) pageEditForm.style.display = 'block';
   } catch (error) {
-    console.error('ページ本文の取得エラー:', error);
+    console.error('ページ編集タブの読み込みエラー:', error);
     if (pageEditError) {
       pageEditError.textContent = error.message || '通信エラーが発生しました。時間をおいて再度お試しください。';
       pageEditError.style.display = 'block';
@@ -48,31 +54,23 @@ async function loadPageContents() {
   }
 }
 
-/**
- * 内部ヘルパー: 今選ばれているページ番号の本文を、編集欄に反映する
- */
-function _renderCurrentPageIntoEditor() {
-  if (!pageEditPageSelect || !pageEditor) return;
-  const pageNum = pageEditPageSelect.value;
-  pageEditor.innerHTML = pageContentsCache[pageNum] || '';
-}
+// ページ切り替え（1ページ〜4ページ）：該当するパネルだけを表示する
+document.querySelectorAll('.page-sub-tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.page-sub-tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
 
-// ページ切り替え時：今表示していた内容を一旦記憶してから、選んだページの内容に切り替える
-// （保存ボタンを押すまでは、切り替えても内容は失われない）
-if (pageEditPageSelect) {
-  pageEditPageSelect.addEventListener('change', () => {
-    const prevPage = pageEditPageSelect.getAttribute('data-current');
-    if (prevPage && pageEditor) pageContentsCache[prevPage] = pageEditor.innerHTML;
-
-    _renderCurrentPageIntoEditor();
-    pageEditPageSelect.setAttribute('data-current', pageEditPageSelect.value);
+    const targetPage = btn.getAttribute('data-page-sub');
+    document.querySelectorAll('.page-sub-panel').forEach(panel => {
+      panel.style.display = (panel.getAttribute('data-page-sub-panel') === targetPage) ? 'block' : 'none';
+    });
   });
-}
+});
 
-// ツールバーのボタン（太字・斜体・見出し・箇条書き・リンク）
+// ツールバーのボタン（太字・斜体・見出し・箇条書き・リンク）。4パネル共通で同じ処理でよい
+// （document.execCommandは、今カーソルがある＝フォーカスしている入力欄に対して効くため）
 document.querySelectorAll('.page-editor-toolbar button[data-cmd]').forEach(btn => {
   btn.addEventListener('click', () => {
-    if (pageEditor) pageEditor.focus();
     const cmd = btn.getAttribute('data-cmd');
 
     if (cmd === 'createLink') {
@@ -88,26 +86,54 @@ document.querySelectorAll('.page-editor-toolbar button[data-cmd]').forEach(btn =
   });
 });
 
-// 画像ボタン → 隠しファイル選択欄をクリックさせる
-if (pageEditImageBtn && pageEditImageInput) {
-  pageEditImageBtn.addEventListener('click', () => {
-    pageEditImageInput.click();
+// 画像ボタン → 対応する（data-editor-targetで紐付いた）隠しファイル選択欄をクリックさせる
+document.querySelectorAll('.page-edit-image-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const targetId = btn.getAttribute('data-editor-target');
+    const input = document.querySelector(`.page-edit-image-input[data-editor-target="${targetId}"]`);
+    if (input) input.click();
   });
-}
+});
 
-// 画像が選択されたら、Googleドライブへアップロードし、本文のカーソル位置に挿入する
-if (pageEditImageInput) {
-  pageEditImageInput.addEventListener('change', () => {
-    const file = pageEditImageInput.files[0];
+// 地図ボタン → Googleマップの「地図を埋め込む」機能でコピーした<iframe>コードを貼り付けてもらい、そのまま本文に挿入する
+document.querySelectorAll('.page-edit-map-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const targetId = btn.getAttribute('data-editor-target');
+    const editor = document.getElementById(targetId);
+
+    const iframeHtml = prompt(
+      'Googleマップで地図を開き、「共有」→「地図を埋め込む」からコピーできる、<iframe...>で始まるコードをそのまま貼り付けてください。'
+    );
+    if (!iframeHtml) return;
+
+    const trimmed = iframeHtml.trim();
+    if (!/^<iframe[\s\S]*<\/iframe>$/i.test(trimmed)) {
+      alert('<iframe>から始まる、Googleマップの埋め込みコードを貼り付けてください。');
+      return;
+    }
+
+    if (editor) editor.focus();
+    document.execCommand('insertHTML', false, trimmed);
+  });
+});
+
+// 画像が選択されたら、Googleドライブへアップロードし、対応する本文欄のカーソル位置に挿入する
+document.querySelectorAll('.page-edit-image-input').forEach(input => {
+  input.addEventListener('change', () => {
+    const file = input.files[0];
     if (!file) return;
+
+    const targetId = input.getAttribute('data-editor-target');
+    const editor = document.getElementById(targetId);
+    const btn = document.querySelector(`.page-edit-image-btn[data-editor-target="${targetId}"]`);
 
     const reader = new FileReader();
     reader.onload = async () => {
       const base64Data = reader.result;
 
-      if (pageEditImageBtn) {
-        pageEditImageBtn.disabled = true;
-        pageEditImageBtn.textContent = 'アップロード中...';
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'アップロード中...';
       }
 
       try {
@@ -119,24 +145,24 @@ if (pageEditImageInput) {
 
         if (!result.success) throw new Error(result.message || '画像のアップロードに失敗しました。');
 
-        if (pageEditor) pageEditor.focus();
+        if (editor) editor.focus();
         document.execCommand('insertImage', false, result.url);
       } catch (error) {
         console.error('画像アップロードエラー:', error);
         alert(error.message || '通信エラーが発生しました。時間をおいて再度お試しください。');
       } finally {
-        if (pageEditImageBtn) {
-          pageEditImageBtn.disabled = false;
-          pageEditImageBtn.textContent = '🖼️画像';
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = '🖼️画像';
         }
-        pageEditImageInput.value = '';
+        input.value = '';
       }
     };
     reader.readAsDataURL(file);
   });
-}
+});
 
-// 保存
+// 保存：Informationカードの内容（INFO_SECTION）＋4ページ分の本文（PAGE_CONTENTS）をまとめて保存する
 if (pageEditForm) {
   pageEditForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -144,17 +170,23 @@ if (pageEditForm) {
     if (pageEditError) pageEditError.style.display = 'none';
     if (pageEditSavedMsg) pageEditSavedMsg.style.display = 'none';
 
-    // 今表示中のページの内容も、保存前にキャッシュへ反映する
-    const currentPage = pageEditPageSelect ? pageEditPageSelect.value : '1';
-    if (pageEditor) pageContentsCache[currentPage] = pageEditor.innerHTML;
-
     if (savePageContentBtn) {
       savePageContentBtn.disabled = true;
       savePageContentBtn.textContent = '保存中...';
     }
 
     try {
-      const settings = { PAGE_CONTENTS: pageContentsCache };
+      const pageContents = {};
+      for (let i = 1; i <= 4; i++) {
+        const editor = document.getElementById(`page-editor-${i}`);
+        pageContents[String(i)] = editor ? editor.innerHTML : '';
+      }
+
+      const settings = {
+        INFO_SECTION: buildInfoSectionSettings(),
+        PAGE_CONTENTS: pageContents
+      };
+
       const token = sessionStorage.getItem(SESSION_TOKEN_KEY) || '';
       const response = await fetch(CONFIG.GAS_WEB_APP_URL, {
         method: 'POST',
@@ -164,9 +196,10 @@ if (pageEditForm) {
 
       if (!result.success) throw new Error(result.message || '保存に失敗しました。');
 
+      pageContentsCache = pageContents;
       if (pageEditSavedMsg) pageEditSavedMsg.style.display = 'block';
     } catch (error) {
-      console.error('ページ本文の保存エラー:', error);
+      console.error('ページ編集タブの保存エラー:', error);
       if (pageEditError) {
         pageEditError.textContent = error.message || '通信エラーが発生しました。時間をおいて再度お試しください。';
         pageEditError.style.display = 'block';
