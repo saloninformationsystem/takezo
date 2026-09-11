@@ -179,6 +179,7 @@ const s6HolidayCalendarId = document.getElementById('s6-holiday-calendar-id');
 const settings3Loading = document.getElementById('settings3-loading');
 const settings3Error = document.getElementById('settings3-error');const settings3SavedMsg = document.getElementById('settings3-saved-msg');
 const settings3Form = document.getElementById('settings3-form');
+const s3Theme = document.getElementById('s3-theme');
 const s3ShopName = document.getElementById('s3-shop-name');
 const s3LogoUrl = document.getElementById('s3-logo-url');
 const s3ShopNameFontSize = document.getElementById('s3-shop-name-font-size');

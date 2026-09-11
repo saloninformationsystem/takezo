@@ -1078,6 +1078,7 @@ async function loadSettings3() {
 
     // 店名・ロゴ
     const branding = result.headerBranding || {};
+    if (s3Theme) s3Theme.value = result.theme || 'natural';
     if (s3ShopName) s3ShopName.value = branding.shopName || '';
     if (s3ShopNameFontSize) s3ShopNameFontSize.value = branding.titleFontSize || '';
     if (s3ShopNameColor) s3ShopNameColor.value = branding.titleColor || '';
@@ -1322,6 +1323,7 @@ if (settings3Form) {
       const headerContactInfo = (phone || hours || closedDay) ? { phone: phone || null, hours: hours || null, closedDay: closedDay || null } : null;
 
       const settings = {
+        THEME: s3Theme ? s3Theme.value : 'natural',
         HEADER_BRANDING: headerBranding,
         HEADER_CONTACT_INFO: headerContactInfo,
         HOME_PAGE_URL: s3HomeUrl.value.trim() || null,

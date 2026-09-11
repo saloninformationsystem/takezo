@@ -137,7 +137,123 @@ async function ensureSystemSettingsLoaded() {
  * GASから受け取った設定値をCONFIGへ反映する
  * @param {Object} settings - GASの getSystemSettings() 返却値
  */
+/**
+ * 予約サイト全体のテーマ（色合い・角の丸み）のプリセット一覧
+ * 管理画面「レイアウト」タブで選んだテーマに応じて、CSS変数（:root）をこの値で上書きする
+ * レイアウト（配置・構成）自体は変えず、色合いや雰囲気だけを切り替える仕組み
+ */
+const THEME_PRESETS = {
+  // ナチュラル（ベージュ×ブラウン）：標準のデザイン。CSSの初期値と同じなので、ここでは何も上書きしない
+  natural: {},
+
+  // モダン・モノトーン（黒×グレー）：シャープで洗練された雰囲気
+  monotone: {
+    '--primary-color': '#1a1a1a',
+    '--accent-color': '#4a4a4a',
+    '--accent-dark': '#2d2d2d',
+    '--bg-color': '#f5f5f5',
+    '--card-bg': '#ffffff',
+    '--input-bg': '#ffffff',
+    '--text-color': '#1a1a1a',
+    '--sub-text-color': '#6b6b6b',
+    '--border-color': '#333333',
+    '--border-light': '#e0e0e0',
+    '--success-color': '#2d6a4f',
+    '--success-bg': '#eef7f2',
+    '--danger-color': '#9e2a2a',
+    '--danger-bg': '#faf0f0',
+    '--shadow-soft': '0 10px 35px rgba(0, 0, 0, 0.10)',
+    '--shadow-hover': '0 12px 32px rgba(0, 0, 0, 0.16)',
+    '--radius-sm': '2px',
+    '--radius-md': '4px',
+    '--radius-lg': '8px'
+  },
+
+  // エレガント・ゴールド（濃紺×金）：高級感のある雰囲気
+  gold: {
+    '--primary-color': '#1c1c2e',
+    '--accent-color': '#c9a869',
+    '--accent-dark': '#a8875a',
+    '--bg-color': '#f7f5f0',
+    '--card-bg': '#ffffff',
+    '--input-bg': '#ffffff',
+    '--text-color': '#1c1c2e',
+    '--sub-text-color': '#8a7a5c',
+    '--border-color': '#c9a869',
+    '--border-light': '#e8dcc0',
+    '--success-color': '#4a6e53',
+    '--success-bg': '#f2f7f3',
+    '--danger-color': '#a13f3f',
+    '--danger-bg': '#fbf4f3',
+    '--shadow-soft': '0 10px 35px rgba(28, 28, 46, 0.10)',
+    '--shadow-hover': '0 12px 32px rgba(28, 28, 46, 0.16)',
+    '--radius-sm': '8px',
+    '--radius-md': '14px',
+    '--radius-lg': '20px'
+  },
+
+  // ポップ・パステル（ピンク系）：可愛らしい雰囲気
+  pastel: {
+    '--primary-color': '#6b4c6e',
+    '--accent-color': '#f2a6c4',
+    '--accent-dark': '#e082ab',
+    '--bg-color': '#fdf3f7',
+    '--card-bg': '#ffffff',
+    '--input-bg': '#ffffff',
+    '--text-color': '#5a3d5c',
+    '--sub-text-color': '#b384a0',
+    '--border-color': '#f2a6c4',
+    '--border-light': '#fbdce9',
+    '--success-color': '#5fa88a',
+    '--success-bg': '#f0f8f4',
+    '--danger-color': '#d17575',
+    '--danger-bg': '#fcf1f1',
+    '--shadow-soft': '0 10px 35px rgba(242, 166, 196, 0.18)',
+    '--shadow-hover': '0 12px 32px rgba(242, 166, 196, 0.26)',
+    '--radius-sm': '10px',
+    '--radius-md': '18px',
+    '--radius-lg': '26px'
+  },
+
+  // クール・ブルー（青系）：清潔感・リラックス感のある雰囲気
+  blue: {
+    '--primary-color': '#1e3a4c',
+    '--accent-color': '#5b9bb5',
+    '--accent-dark': '#3f7a91',
+    '--bg-color': '#eef5f7',
+    '--card-bg': '#ffffff',
+    '--input-bg': '#ffffff',
+    '--text-color': '#1e3a4c',
+    '--sub-text-color': '#6b96a3',
+    '--border-color': '#5b9bb5',
+    '--border-light': '#cbe3ea',
+    '--success-color': '#4a8a6e',
+    '--success-bg': '#f0f7f3',
+    '--danger-color': '#b3564f',
+    '--danger-bg': '#fbf1f0',
+    '--shadow-soft': '0 10px 35px rgba(30, 58, 76, 0.10)',
+    '--shadow-hover': '0 12px 32px rgba(30, 58, 76, 0.16)',
+    '--radius-sm': '6px',
+    '--radius-md': '12px',
+    '--radius-lg': '18px'
+  }
+};
+
+/**
+ * 指定されたテーマを、ページ全体（:root）のCSS変数に適用する
+ * @param {string} themeKey - THEME_PRESETSのキー（例："monotone"）。未知の値・空欄は"natural"（標準）扱い
+ */
+function applyTheme(themeKey) {
+  const preset = THEME_PRESETS[themeKey] || THEME_PRESETS.natural;
+  const root = document.documentElement;
+  Object.keys(preset).forEach(varName => {
+    root.style.setProperty(varName, preset[varName]);
+  });
+}
+
 function applySystemSettings(settings) {
+  applyTheme(settings.theme);
+
   CONFIG.MAX_FUTURE_DAYS = settings.maxFutureDays;
   CONFIG.DISPLAY_DAYS = settings.displayDays;
   CONFIG.CANCEL_BUFFER_HOURS = settings.cancelBufferHours;
