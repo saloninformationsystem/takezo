@@ -294,6 +294,7 @@ function initializeEvents() {
 // -----------------------------------------------------------------
 window.addEventListener('DOMContentLoaded', async () => {
   initializeEvents();
+  initializeFontSizeControl();
   applyCachedCustomerDataToForm();
   showSection(step1Container);
   await initializeSystemUI();

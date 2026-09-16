@@ -236,6 +236,75 @@ const THEME_PRESETS = {
     '--radius-sm': '6px',
     '--radius-md': '12px',
     '--radius-lg': '18px'
+  },
+
+  // グリーン系：落ち着いた・ナチュラルな雰囲気
+  green: {
+    '--primary-color': '#2d4a3a',
+    '--accent-color': '#6b9080',
+    '--accent-dark': '#4f7161',
+    '--bg-color': '#f2f6f3',
+    '--card-bg': '#ffffff',
+    '--input-bg': '#ffffff',
+    '--text-color': '#2d4a3a',
+    '--sub-text-color': '#7a9c8c',
+    '--border-color': '#6b9080',
+    '--border-light': '#cde0d6',
+    '--success-color': '#4a8a6e',
+    '--success-bg': '#f0f8f4',
+    '--danger-color': '#b3564f',
+    '--danger-bg': '#fbf1f0',
+    '--shadow-soft': '0 10px 35px rgba(45, 74, 58, 0.10)',
+    '--shadow-hover': '0 12px 32px rgba(45, 74, 58, 0.16)',
+    '--radius-sm': '8px',
+    '--radius-md': '14px',
+    '--radius-lg': '20px'
+  },
+
+  // ワインレッド系：重厚感・高級感のある雰囲気
+  wine: {
+    '--primary-color': '#3a1f24',
+    '--accent-color': '#8b3a4a',
+    '--accent-dark': '#6e2d3a',
+    '--bg-color': '#f7f1f2',
+    '--card-bg': '#ffffff',
+    '--input-bg': '#ffffff',
+    '--text-color': '#3a1f24',
+    '--sub-text-color': '#a07680',
+    '--border-color': '#8b3a4a',
+    '--border-light': '#e6cdd1',
+    '--success-color': '#4a6e53',
+    '--success-bg': '#f2f7f3',
+    '--danger-color': '#a13f3f',
+    '--danger-bg': '#fbf4f3',
+    '--shadow-soft': '0 10px 35px rgba(58, 31, 36, 0.10)',
+    '--shadow-hover': '0 12px 32px rgba(58, 31, 36, 0.16)',
+    '--radius-sm': '6px',
+    '--radius-md': '12px',
+    '--radius-lg': '18px'
+  },
+
+  // ラベンダー系：やわらかく上品な雰囲気
+  lavender: {
+    '--primary-color': '#4a3f5c',
+    '--accent-color': '#9b8ab5',
+    '--accent-dark': '#7d6b9e',
+    '--bg-color': '#f6f4f9',
+    '--card-bg': '#ffffff',
+    '--input-bg': '#ffffff',
+    '--text-color': '#4a3f5c',
+    '--sub-text-color': '#a89bc0',
+    '--border-color': '#9b8ab5',
+    '--border-light': '#e3dcee',
+    '--success-color': '#5fa88a',
+    '--success-bg': '#f0f8f4',
+    '--danger-color': '#c06b7a',
+    '--danger-bg': '#faf0f2',
+    '--shadow-soft': '0 10px 35px rgba(74, 63, 92, 0.10)',
+    '--shadow-hover': '0 12px 32px rgba(74, 63, 92, 0.16)',
+    '--radius-sm': '10px',
+    '--radius-md': '16px',
+    '--radius-lg': '22px'
   }
 };
 
@@ -248,6 +317,37 @@ function applyTheme(themeKey) {
   const root = document.documentElement;
   Object.keys(preset).forEach(varName => {
     root.style.setProperty(varName, preset[varName]);
+  });
+}
+
+/**
+ * 文字サイズ（標準100%・大115%・特大130%）を適用する
+ * ページ全体をまとめて拡大することで、文字だけでなくボタン等のレイアウトも崩れずに大きくなる
+ * お客様ご自身が、老眼対策などで見やすいサイズを選べるようにするための機能
+ * @param {number} scale - 100・115・130のいずれか
+ */
+function applyFontScale(scale) {
+  const validScale = [100, 115, 130].includes(scale) ? scale : 100;
+  document.body.style.zoom = `${validScale}%`;
+
+  document.querySelectorAll('.font-size-btn').forEach(btn => {
+    btn.classList.toggle('active', parseInt(btn.getAttribute('data-scale'), 10) === validScale);
+  });
+}
+
+/**
+ * ページ読み込み時、文字サイズボタンに保存済みの設定を反映し、クリック時の処理を登録する
+ */
+function initializeFontSizeControl() {
+  const savedScale = getCachedFontScale();
+  applyFontScale(savedScale);
+
+  document.querySelectorAll('.font-size-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const scale = parseInt(btn.getAttribute('data-scale'), 10);
+      applyFontScale(scale);
+      saveFontScaleToCache(scale);
+    });
   });
 }
 

@@ -225,6 +225,7 @@ function showDashboard(isLoggedIn) {
 
   if (isLoggedIn) {
     setupReportTypeOptions();
+    checkAndShowSetupWizard();
   }
 }
 
@@ -356,7 +357,10 @@ if (loginForm) {
 }
 
 if (logoutBtn) {
-  logoutBtn.addEventListener('click', () => {
+  logoutBtn.addEventListener('click', async () => {
+    if (typeof isDemoModeActive !== 'undefined' && isDemoModeActive) {
+      try { await callAdminApi('logoutFromDemo'); } catch (e) { /* 失敗しても通常のログアウトは続行する */ }
+    }
     sessionStorage.removeItem(SESSION_TOKEN_KEY);
     sessionStorage.removeItem(SESSION_DISPLAY_NAME_KEY);
     showDashboard(false);

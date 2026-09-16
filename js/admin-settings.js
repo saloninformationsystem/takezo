@@ -245,6 +245,19 @@ function getTimeFromSelects(container, className) {
   return `${hour}:${minute}`;
 }
 
+/**
+ * CONFIG.BUSINESS に保存されている開店・閉店時刻の値を、画面表示用の "HH:mm" 文字列に整える
+ * 新形式（"09:30"のような文字列）はそのまま、旧形式（9のような時のみの数値）は "09:00" に変換する
+ * （営業時間を「時・分」対応に変更する前の、古い保存データとの互換性のため）
+ * @param {string|number} value
+ * @returns {string} "HH:mm" 形式の文字列、または空文字
+ */
+function _normalizeBusinessTimeForDisplay(value) {
+  if (value === null || typeof value === 'undefined' || value === '') return '';
+  if (typeof value === 'number') return String(value).padStart(2, '0') + ':00';
+  return value;
+}
+
 function renderBusinessHoursRows(business, lastOrderOverride) {
   if (!businessHoursRows) return;
 
@@ -252,8 +265,9 @@ function renderBusinessHoursRows(business, lastOrderOverride) {
 
   businessHoursRows.innerHTML = DAY_LABELS.map((label, dayIndex) => {
     const hours = business[dayIndex] || business[String(dayIndex)] || null;
-    const openHour = hours ? hours[0] : '';
-    const closeHour = hours ? hours[1] : '';
+    // 旧形式（9のような時のみの数値）・新形式（"09:00"のような文字列）どちらでも表示できるようにする
+    const openTime = hours ? _normalizeBusinessTimeForDisplay(hours[0]) : '';
+    const closeTime = hours ? _normalizeBusinessTimeForDisplay(hours[1]) : '';
 
     const override = lastOrderOverride[dayIndex] || lastOrderOverride[String(dayIndex)] || null;
     const hasOverride = !!override;
@@ -263,10 +277,10 @@ function renderBusinessHoursRows(business, lastOrderOverride) {
     return `
       <div class="business-hours-row" data-day="${dayIndex}">
         <span class="day-label">${label}曜日</span>
-        <input type="number" class="business-open-input" min="0" max="23" value="${openHour}" placeholder="休">
-        <span class="time-sep">時 〜</span>
-        <input type="number" class="business-close-input" min="0" max="23" value="${closeHour}" placeholder="休">
-        <span class="time-sep">時</span>
+        ${buildTimeSelectHtml('business-open-select', openTime, false)}
+        <span class="time-sep">〜</span>
+        ${buildTimeSelectHtml('business-close-select', closeTime, false)}
+        <span class="time-sep">（両方未選択で休み）</span>
       </div>
       <div class="last-order-row" data-day="${dayIndex}">
         <label><input type="checkbox" class="last-order-check" ${hasOverride ? 'checked' : ''}> 最終受付制を設定する</label>
@@ -791,10 +805,10 @@ if (settings6Form) {
       const business = {};
       document.querySelectorAll('.business-hours-row').forEach(row => {
         const day = row.getAttribute('data-day');
-        const openVal = row.querySelector('.business-open-input').value;
-        const closeVal = row.querySelector('.business-close-input').value;
+        const openVal = getTimeFromSelects(row, 'business-open-select');
+        const closeVal = getTimeFromSelects(row, 'business-close-select');
         if (openVal !== '' && closeVal !== '') {
-          business[day] = [parseInt(openVal, 10), parseInt(closeVal, 10)];
+          business[day] = [openVal, closeVal];
         }
       });
 
