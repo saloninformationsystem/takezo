@@ -198,6 +198,12 @@
     <section id="tab-settings1" class="tab-page" style="display: none;">
       <h2 class="section-title">基本設定</h2>
 
+      <div class="settings-card">
+        <h3 class="settings-card-title">セットアップウィザード</h3>
+        <p class="settings-card-note">店舗名・営業時間・スタッフ・メニューを、質問に答えるだけでまとめて設定できます。最初に案内される画面ですが、いつでも開き直せます。</p>
+        <button type="button" id="open-wizard-btn" class="btn-add-row">セットアップウィザードを開く</button>
+      </div>
+
       <div id="settings1-loading" class="settings-loading">読み込み中...</div>
       <div id="settings1-error" class="report-error" style="display: none;"></div>
       <div id="settings1-saved-msg" class="settings-saved-msg" style="display: none;">保存しました。</div>
@@ -571,15 +577,18 @@
       <form id="settings3-form" style="display: none;">
 
         <div class="settings-card">
-          <h3 class="settings-card-title">予約サイト全体のテーマ</h3>
+          <h3 class="settings-card-title">予約サイトカラー</h3>
           <div class="form-group">
-            <p class="settings-card-note">色合い・雰囲気をまとめて切り替えられます。店名・ロゴなど、他の設定はテーマを変えても引き継がれます。</p>
+            <p class="settings-card-note">色合い・雰囲気をまとめて切り替えられます。店名・ロゴなど、他の設定はカラーを変えても引き継がれます。</p>
             <select id="s3-theme">
-              <option value="natural">ナチュラル（ベージュ×ブラウン。標準）</option>
-              <option value="monotone">モダン・モノトーン（黒×グレー）</option>
-              <option value="gold">エレガント・ゴールド（濃紺×金）</option>
-              <option value="pastel">ポップ・パステル（ピンク系）</option>
-              <option value="blue">クール・ブルー（青系）</option>
+              <option value="natural">ベージュ・ブラウン（標準）</option>
+              <option value="monotone">黒・グレー</option>
+              <option value="gold">濃紺・ゴールド</option>
+              <option value="pastel">ピンク系パステル</option>
+              <option value="blue">ブルー系</option>
+              <option value="green">グリーン系</option>
+              <option value="wine">ワインレッド系</option>
+              <option value="lavender">ラベンダー系</option>
             </select>
           </div>
         </div>
@@ -894,11 +903,154 @@
   </main>
 </div>
 
+<div id="wizard-overlay" class="wizard-overlay" style="display: none;">
+  <div class="wizard-box">
+
+    <div class="wizard-step-indicator">
+      <div class="wizard-step-item" data-wizard-step="1">
+        <div class="wizard-step-circle">1</div>
+        <div class="wizard-step-label">店舗名</div>
+      </div>
+      <div class="wizard-step-line"></div>
+      <div class="wizard-step-item" data-wizard-step="2">
+        <div class="wizard-step-circle">2</div>
+        <div class="wizard-step-label">営業時間</div>
+      </div>
+      <div class="wizard-step-line"></div>
+      <div class="wizard-step-item" data-wizard-step="3">
+        <div class="wizard-step-circle">3</div>
+        <div class="wizard-step-label">スタッフ</div>
+      </div>
+      <div class="wizard-step-line"></div>
+      <div class="wizard-step-item" data-wizard-step="4">
+        <div class="wizard-step-circle">4</div>
+        <div class="wizard-step-label">メニュー</div>
+      </div>
+      <div class="wizard-step-line"></div>
+      <div class="wizard-step-item" data-wizard-step="5">
+        <div class="wizard-step-circle">5</div>
+        <div class="wizard-step-label">完了</div>
+      </div>
+    </div>
+
+    <div id="wizard-error" class="report-error" style="display: none;"></div>
+
+    <!-- STEP1：店舗名 -->
+    <div class="wizard-panel" data-wizard-panel="1">
+      <h3 class="wizard-panel-title">まず、お店の名前を教えてください</h3>
+      <p class="settings-card-note">Googleカレンダーの予定名や、お客様へのメールの件名に使われます。後から設定で変更可。</p>
+      <div class="form-group">
+        <label for="wizard-salon-name">店舗名</label>
+        <input type="text" id="wizard-salon-name" placeholder="例：美容室〇〇">
+      </div>
+      <div class="wizard-buttons">
+        <span></span>
+        <button type="button" class="btn-save-settings" id="wizard-step1-next">次へ</button>
+      </div>
+    </div>
+
+    <!-- STEP2：営業時間・定休日 -->
+    <div class="wizard-panel" data-wizard-panel="2" style="display: none;">
+      <h3 class="wizard-panel-title">営業時間を教えてください</h3>
+      <p class="settings-card-note">全曜日共通の時間で設定します。曜日ごと個別の時間に設定したい場合は、あとから変更できます。</p>
+      <div class="form-group">
+        <label>開店時刻 〜 閉店時刻</label>
+        <div class="wizard-time-row" id="wizard-time-row"></div>
+      </div>
+      <div class="form-group">
+        <label>定休日（あてはまる曜日をすべて選んでください。なければ空欄のままでOKです）</label>
+        <div class="wizard-weekday-checks" id="wizard-weekday-checks">
+          <label><input type="checkbox" class="wizard-weekday-check" value="0"> 日</label>
+          <label><input type="checkbox" class="wizard-weekday-check" value="1"> 月</label>
+          <label><input type="checkbox" class="wizard-weekday-check" value="2"> 火</label>
+          <label><input type="checkbox" class="wizard-weekday-check" value="3"> 水</label>
+          <label><input type="checkbox" class="wizard-weekday-check" value="4"> 木</label>
+          <label><input type="checkbox" class="wizard-weekday-check" value="5"> 金</label>
+          <label><input type="checkbox" class="wizard-weekday-check" value="6"> 土</label>
+        </div>
+        <p class="settings-card-note">「定休日カレンダー」に、毎週繰り返しの定休日、もしくは休暇として登録されます。</p>
+      </div>
+
+      <div class="form-group">
+        <label>第○曜日の定休日（任意。毎週の定休日とは別に、「第2火曜日」のような変則の休みがあれば追加してください）</label>
+        <div id="wizard-nth-weekday-rows"></div>
+        <button type="button" id="wizard-add-nth-weekday-btn" class="btn-add-row">＋ 第○曜日の定休日を追加</button>
+      </div>
+
+      <div class="form-group">
+        <label>年末年始・夏季休暇など（任意。期間で指定できます）</label>
+        <div id="wizard-date-range-rows"></div>
+        <button type="button" id="wizard-add-date-range-btn" class="btn-add-row">＋ 休暇期間を追加</button>
+      </div>
+
+      <div class="wizard-buttons">
+        <button type="button" class="btn-link" id="wizard-step2-back">戻る</button>
+        <button type="button" class="btn-save-settings" id="wizard-step2-next">次へ</button>
+      </div>
+    </div>
+
+    <!-- STEP3：スタッフ -->
+    <div class="wizard-panel" data-wizard-panel="3" style="display: none;">
+      <h3 class="wizard-panel-title">営業形態について</h3>
+      <div class="form-group">
+        <div class="wizard-radio-row">
+          <label><input type="radio" name="wizard-staff-mode" value="solo" checked><span class="wizard-radio-text">一人営業</span></label>
+          <label><input type="radio" name="wizard-staff-mode" value="multi"><span class="wizard-radio-text">複数人営業</span></label>
+        </div>
+      </div>
+      <div id="wizard-staff-rows"></div>
+      <button type="button" id="wizard-add-staff-btn" class="btn-add-row" style="display: none;">＋ スタッフを追加</button>
+      <p class="settings-card-note">名前は、自動で作成するGoogleカレンダーの名前としても使われます。</p>
+      <div class="wizard-buttons">
+        <button type="button" class="btn-link" id="wizard-step3-back">戻る</button>
+        <button type="button" class="btn-save-settings" id="wizard-step3-next">次へ</button>
+      </div>
+    </div>
+
+    <!-- STEP4：メニュー -->
+    <div class="wizard-panel" data-wizard-panel="4" style="display: none;">
+      <h3 class="wizard-panel-title">メニューについて教えてください</h3>
+      <div class="form-group">
+        <label>お客様がメニューを選ぶ時の形式を選んでください</label>
+        <p class="settings-card-note">あとから「メニュー」タブで変更できます。</p>
+        <div class="wizard-radio-row wizard-radio-col">
+          <label><input type="radio" name="wizard-menu-type" value="TYPE_B" checked><span class="wizard-radio-text"><b>チェックボックス式</b><br>「カット」や「カラー」など単品メニューをお客様が自由に組み合わせて選べます。<br>自由度が高く、メニュー数が多い場合に向いています。</span></label>
+          <label><input type="radio" name="wizard-menu-type" value="TYPE_A"><span class="wizard-radio-text"><b>プルダウン式</b><br>最初から「カラー＆カット」のように組み合わせているのでお客様がわかりやすいのが特徴です。<br>メニュー表示が多くなりやすいのでセットメニューやメニュー数が少ない場合に向いてます。</span></label>
+        </div>
+      </div>
+      <div id="wizard-menu-rows"></div>
+      <button type="button" id="wizard-add-menu-btn" class="btn-add-row">＋ メニューを追加</button>
+      <p class="settings-card-note">メニュー名・施術時間は必須項目、金額は任意です。後から設定で変更可</p>
+      <div class="wizard-buttons">
+        <button type="button" class="btn-link" id="wizard-step4-back">戻る</button>
+        <button type="button" class="btn-save-settings" id="wizard-step4-next">次へ</button>
+      </div>
+    </div>
+
+    <!-- STEP5：完了・道案内 -->
+    <div class="wizard-panel" data-wizard-panel="5" style="display: none;">
+      <h3 class="wizard-panel-title">セットアップが完了しました！</h3>
+      <p class="settings-card-note">予約サイトのURLはこちらです。お店のホームページなどにリンクしてください。</p>
+      <div class="form-group">
+        <input type="text" id="wizard-site-url" readonly>
+      </div>
+      <h4 class="wizard-panel-subtitle">次にやるとよいこと</h4>
+      <div class="wizard-next-cards" id="wizard-next-cards"></div>
+      <div class="wizard-buttons">
+        <span></span>
+        <button type="button" class="btn-save-settings" id="wizard-finish-btn">管理画面を開く</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <script src="./js/config.js?v=3.3.0"></script>
 <script src="./js/admin-core.js?v=1.0.1"></script>
 <script src="./js/admin-reports.js?v=1.0.0"></script>
 <script src="./js/admin-settings.js?v=1.0.1"></script>
 <script src="./js/admin-pages.js?v=1.0.0"></script>
+<script src="./js/admin-wizard.js?v=1.0.0"></script>
 <script src="./js/admin-accounts.js?v=1.0.0"></script>
 
 </body>
