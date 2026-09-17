@@ -34,8 +34,8 @@ const CONFIG = {
 
   // フッターのコピーライト表記内のリンク（文言・リンク先）
   // GAS側の設定は経由せず、ここを直接書き換えて変更する
-  COPYRIGHT_LINK_TEXT: "Works",
-  COPYRIGHT_LINK_URL: "https://simozuru.github.io/SIS-dev/#"
+  COPYRIGHT_LINK_TEXT: "SIS",
+  COPYRIGHT_LINK_URL: "https://sis.hair"
 };
 
 // 画面全体で共有する状態
