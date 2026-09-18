@@ -157,6 +157,16 @@ async function handleReservationSubmit(e) {
     alert(t('err_network_short'));
   } finally {
     submitBtn.disabled = false;
+    if (isChange) {
+      submitBtn.textContent = (getChangeProvisionalWordingMode() === 'PROVISIONAL')
+        ? t('submit_btn_change_provisional')
+        : t('submit_btn_change');
+    } else {
+      const mode = getProvisionalWordingMode();
+      submitBtn.textContent = mode === 'PROVISIONAL'
+        ? t('submit_btn_provisional')
+        : (mode === 'NEUTRAL' ? t('submit_btn_neutral') : t('submit_btn_confirm'));
+    }
   }
 }
 

@@ -31,6 +31,30 @@ function getCachedCustomerData() {
 }
 
 /**
+ * 2. 指定されたお客様情報をローカルストレージに保存する
+ * @param {Object} data - 保存対象データ
+ */
+function saveCustomerDataToCache(data) {
+  try {
+    if (typeof CONFIG === "undefined" || !Array.isArray(CONFIG.STORAGE_FIELDS)) {
+      return;
+    }
+
+    CONFIG.STORAGE_FIELDS.forEach(field => {
+      const value = data[field];
+
+      if (value && String(value).trim()) {
+        localStorage.setItem(`${CONFIG.STORAGE_PREFIX}${field}`, String(value).trim());
+      } else {
+        localStorage.removeItem(`${CONFIG.STORAGE_PREFIX}${field}`);
+      }
+    });
+  } catch (e) {
+    console.warn("ローカルストレージへのデータ保存に失敗しました:", e);
+  }
+}
+
+/**
  * 3. 文字サイズの設定（100/115/130）をローカルストレージに保存する
  * @param {number} scale
  */
