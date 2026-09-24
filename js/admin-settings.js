@@ -280,7 +280,6 @@ function renderBusinessHoursRows(business, lastOrderOverride) {
         ${buildTimeSelectHtml('business-open-select', openTime, false)}
         <span class="time-sep">〜</span>
         ${buildTimeSelectHtml('business-close-select', closeTime, false)}
-        <span class="time-sep">（両方未選択で休み）</span>
       </div>
       <div class="last-order-row" data-day="${dayIndex}">
         <label><input type="checkbox" class="last-order-check" ${hasOverride ? 'checked' : ''}> 最終受付制を設定する</label>
@@ -1094,6 +1093,7 @@ async function loadSettings3() {
     const branding = result.headerBranding || {};
     if (s3Theme) s3Theme.value = result.theme || 'natural';
     if (s3ShopName) s3ShopName.value = branding.shopName || '';
+    if (s3ShowDefaultShopName) s3ShowDefaultShopName.checked = branding.showDefaultShopName !== false;
     if (s3ShopNameFontSize) s3ShopNameFontSize.value = branding.titleFontSize || '';
     if (s3ShopNameColor) s3ShopNameColor.value = branding.titleColor || '';
     if (s3ShopNameFontFamily) s3ShopNameFontFamily.value = branding.titleFontFamily || '';
@@ -1320,13 +1320,15 @@ if (settings3Form) {
       const shopNameFontSize = s3ShopNameFontSize.value.trim();
       const shopNameColor = s3ShopNameColor.value.trim();
       const shopNameFontFamily = s3ShopNameFontFamily.value.trim();
-      const headerBranding = (shopName || logoUrl || shopNameFontSize || shopNameColor || shopNameFontFamily)
+      const showDefaultShopName = !!s3ShowDefaultShopName.checked;
+      const headerBranding = (shopName || logoUrl || shopNameFontSize || shopNameColor || shopNameFontFamily || !showDefaultShopName)
         ? {
             shopName: shopName || null,
             logoUrl: logoUrl || null,
             titleFontSize: shopNameFontSize || null,
             titleColor: shopNameColor || null,
-            titleFontFamily: shopNameFontFamily || null
+            titleFontFamily: shopNameFontFamily || null,
+            showDefaultShopName: showDefaultShopName
           }
         : null;
 

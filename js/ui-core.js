@@ -398,6 +398,13 @@ function applySystemSettings(settings) {
   if (branding && branding.shopName && mainTitle) {
     mainTitle.textContent = branding.shopName;
     if (mainSubtitle) mainSubtitle.style.display = 'none';
+  } else if (mainTitle) {
+    // 店舗名が未入力の場合：showDefaultShopNameがfalseの時だけ非表示にする。
+    // 未設定（brandingが無い/項目が無い）の場合は、これまで通りデフォルト表示のままにする。
+    const showDefault = !branding || branding.showDefaultShopName !== false;
+    if (!showDefault) {
+      mainTitle.style.display = 'none';
+    }
   }
   if (branding && mainTitle) {
     // 店舗名を入力していない場合（デフォルトの「SIS / Web Reservation」表示のまま）でも、

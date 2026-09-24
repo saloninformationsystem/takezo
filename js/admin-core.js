@@ -181,6 +181,7 @@ const settings3Error = document.getElementById('settings3-error');const settings
 const settings3Form = document.getElementById('settings3-form');
 const s3Theme = document.getElementById('s3-theme');
 const s3ShopName = document.getElementById('s3-shop-name');
+const s3ShowDefaultShopName = document.getElementById('s3-show-default-shopname');
 const s3LogoUrl = document.getElementById('s3-logo-url');
 const s3ShopNameFontSize = document.getElementById('s3-shop-name-font-size');
 const s3ShopNameColor = document.getElementById('s3-shop-name-color');
