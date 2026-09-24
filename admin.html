@@ -200,7 +200,7 @@
 
       <div class="settings-card">
         <h3 class="settings-card-title">セットアップウィザード</h3>
-        <p class="settings-card-note">店舗名・営業時間・スタッフ・メニューを、質問に答えるだけでまとめて設定できます。最初に案内される画面ですが、いつでも開き直せます。</p>
+        <p class="settings-card-note">店舗名・営業時間・スタッフ・メニューを、質問に答えながらまとめて設定できます。初回に案内されますが、いつでも開き直せます。</p>
         <button type="button" id="open-wizard-btn" class="btn-add-row">セットアップウィザードを開く</button>
       </div>
 
@@ -221,7 +221,7 @@
         <div class="settings-card">
           <h3 class="settings-card-title">予約可能な期間</h3>
           <div class="form-group">
-            <p class="settings-card-note">何日先まで予約できるか？</p>
+            <p class="settings-card-note">何日先まで予約できるかを設定します。</p>
             <input type="number" id="s1-max-future-days" min="1">
           </div>
         </div>
@@ -229,7 +229,7 @@
         <div class="settings-card">
           <h3 class="settings-card-title">新規予約の最短受付タイミング</h3>
           <div class="form-group">
-            <p class="settings-card-note">今から何分後以降の枠なら予約できるか</p>
+            <p class="settings-card-note">今から何分後以降の予約を受け付けるかを設定します。</p>
             <input type="number" id="s1-buffer-minutes" min="0">
           </div>
         </div>
@@ -237,7 +237,7 @@
         <div class="settings-card">
           <h3 class="settings-card-title">表示する日数</h3>
           <div class="form-group">
-            <p class="settings-card-note">お客様のタイムテーブルに、一度に何日分の空き状況を表示するかです。「1週間分」に設定すると、7日分まとめて確認しながら選べます。</p>
+            <p class="settings-card-note">お客様のタイムテーブルに、一度に何日分の空き状況を表示するかを設定します。</p>
             <select id="s1-display-days">
               <option value="1">1日分</option>
               <option value="3">3日分</option>
@@ -249,7 +249,7 @@
         <div class="settings-card">
           <h3 class="settings-card-title">同時受付上限</h3>
           <div class="form-group">
-            <p class="settings-card-note">同じ時間帯に、全体で何件まで受け付けるか</p>
+            <p class="settings-card-note">同じ時間帯に、全体で何件まで受け付けるかを設定します。</p>
             <input type="number" id="s1-max-capacity" min="1">
           </div>
         </div>
@@ -257,7 +257,7 @@
         <div class="settings-card">
           <h3 class="settings-card-title">キャンセルの受付締切</h3>
           <div class="form-group">
-            <p class="settings-card-note">キャンセルは、来店の何時間前まで受け付けるか？</p>
+            <p class="settings-card-note">キャンセルは、来店の何時間前まで受け付けるかを設定します。</p>
             <input type="number" id="s1-cancel-buffer" min="0">
           </div>
         </div>
@@ -265,14 +265,14 @@
         <div class="settings-card">
           <h3 class="settings-card-title">変更の受付締切</h3>
           <div class="form-group">
-            <p class="settings-card-note">日時変更は、来店の何時間前まで受け付けるか？</p>
+            <p class="settings-card-note">日時変更は、来店の何時間前まで受け付けるかを設定します。</p>
             <input type="number" id="s1-change-buffer" min="0">
           </div>
         </div>
 
         <div class="settings-card">
           <h3 class="settings-card-title">Googleカレンダーの直接編集の検知</h3>
-          <p class="settings-card-note">Googleカレンダー上で予約をドラッグ移動するなど、直接編集した内容を自動検知してスプレッドシートに反映する機能です（1時間ごとに巡回チェックします）。</p>
+          <p class="settings-card-note">Googleカレンダーを直接編集した内容を自動検知し、スプレッドシートに反映します。1時間ごとにチェックします。</p>
           <div class="form-group checkbox-group">
             <label><input type="checkbox" id="s1-calendar-sync-enabled"> 直接編集の検知を使う</label>
           </div>
@@ -296,7 +296,7 @@
 
         <div class="settings-card">
           <h3 class="settings-card-title">メニュー・料金</h3>
-          <p class="settings-card-note">「～」にチェックを入れると、そのメニューの施術時間・料金の後ろに「～」が付いて表示されます（例：カット　60分～　￥5,000～）。お客様やお髪の状態によって前後する場合にご利用ください。</p>
+          <p class="settings-card-note">「～」にチェックを入れると、施術時間・料金に「～」を付けて表示します（例：カット　60分～　￥5,000～）。お客様や髪の状態によって、施術時間・料金が前後する場合にご利用ください。</p>
           <div class="menu-master-header">
             <span class="col-name">メニュー</span>
             <span class="col-minutes">施術時間</span>
@@ -319,9 +319,9 @@
             <label><input type="checkbox" id="s5-show-menu-total"> 選んだメニューの合計金額と合計施術時間を表示する</label>
           </div>
           <div class="form-group">
-            <label for="s5-menu-note-text">施術メニューの下に表示する説明文（任意・空欄で非表示）</label>
-            <p class="settings-card-note">例：施術時間と金額は目安であり確定ではありません。施術内容によって金額と施術時間が前後します。</p>
-            <textarea id="s5-menu-note-text" rows="3" placeholder="施術時間と金額は目安であり確定ではありません。施術内容によって金額と施術時間が前後します。"></textarea>
+            <label for="s5-menu-note-text">施術メニューの下に表示する説明文（空欄で非表示）</label>
+            <p class="settings-card-note">例：施術時間・料金は目安となります。髪の状態や施術内容などにより、実際の施術時間・料金が前後する場合がございます。</p>
+            <textarea id="s5-menu-note-text" rows="3" placeholder="施術時間・料金は目安となります。髪の状態や施術内容などにより、実際の施術時間・料金が前後する場合がございます。"></textarea>
             <button type="button" id="btn-menu-note-i18n-toggle" class="btn-i18n-toggle">🌐 多言語対応サイト向けの翻訳を編集</button>
             <div id="menu-note-i18n-panel" class="menu-i18n-panel" style="display: none;">
               <p class="i18n-panel-note">未入力の言語は、日本語の説明文がそのまま表示されます</p>
@@ -361,8 +361,8 @@
             <label><input type="checkbox" id="s5-waitlist-enabled"> キャンセル待ち機能を使う</label>
           </div>
           <div class="form-group">
-            <label for="s5-waitlist-interval">次の対象者へ案内を回すまでの待ち時間（分）</label>
-            <p class="settings-card-note">空欄：空きが出た時、対象者（施術時間的にその枠に入れる人）全員に同時に通知する（早い者勝ち）。数値を入れると、登録順に1人ずつ通知し、その分数だけ反応がなければ自動的に次の対象者へ回す。</p>
+            <label for="s5-waitlist-interval">キャンセル待ちの案内時間（分）</label>
+            <p class="settings-card-note">空欄の場合は、対象者全員に同時に通知します（早い者勝ち）。数値を設定すると、登録順に1人ずつ通知し、設定した時間内に反応がなければ次の対象者へ通知します。</p>
             <input type="number" id="s5-waitlist-interval" min="1" placeholder="空欄でOK">
           </div>
           <div class="form-group">
@@ -390,24 +390,24 @@
 
         <div class="settings-card">
           <h3 class="settings-card-title">営業時間</h3>
-          <p class="settings-card-note">通常の予約時間とは別に最終受付時間を設定できます。<br>
-          最終受付は、終了時刻を越さない範囲で予約できます。<br><br>
+          <p class="settings-card-note">通常の予約時間とは別に、最終受付時間を設定できます。<br>
+          施術終了時刻が終了時刻を超えない範囲で予約を受け付けます。<br><br>
           例えば、最終受付を18:00、終了時刻を20:00にすると、<br>
-          施術時間が２時間までのメニューは18:00まで予約受け付け可能。<br>
-          施術時間が３時間のメニューの場合は20:00が上限なので最終受付が17：00になります。</p>
+          2時間までのメニューは18:00まで予約できます。<br>
+          3時間のメニューは20:00までに終了する必要があるため、17:00が最終受付となります。</p>
           <div id="business-hours-rows" class="business-hours-rows"></div>
         </div>
 
         <div class="settings-card">
-          <h3 class="settings-card-title">指定時間、予約間隔の設定</h3>
+          <h3 class="settings-card-title">指定時間帯の予約間隔の設定</h3>
           <p class="settings-card-note">通常の予約時間の間隔とは別に、指定した時間帯の予約間隔を設定できます。<br>
-          例えば「9:00〜12:00を60分間隔」にすると、その時間帯は9:00、10:00、11:00…のように予約時間を制限できます。</p>
+          例えば「9:00〜12:00を60分間隔」にすると、その時間帯は9:00、10:00、11:00…のように予約時間を設定できます。</p>
           <div id="slot-step-override-rows" class="slot-step-override-rows"></div>
         </div>
 
         <div class="settings-card">
           <h3 class="settings-card-title">定休日カレンダー</h3>
-          <p class="settings-card-note">Googleカレンダーで決めた定休日を表示します。空欄の場合は使いません。</p>
+          <p class="settings-card-note">Googleカレンダーで設定した定休日を表示します。空欄の場合は使用しません。</p>
           <div class="form-group">
             <label for="s6-holiday-calendar-id">定休日カレンダーID</label>
             <input type="text" id="s6-holiday-calendar-id" placeholder="カレンダーID（xxxx@group.calendar.google.com）">
@@ -432,14 +432,14 @@
 
         <div class="settings-card">
           <h3 class="settings-card-title">スタッフ名・カレンダーID</h3>
-          <p class="settings-card-note">スタッフを登録すると、担当スタッフを選ぶ欄に表示されます。予約画面にこの選択欄自体を表示するかどうかは、下の「スタッフ選択欄の表示」で切り替えられます。カレンダーIDを間違えると、そのスタッフの予約が正しく登録されなくなります。コピー＆ペーストで、正確に入力してください。</p>
+          <p class="settings-card-note">スタッフを登録すると、担当スタッフの選択欄に表示されます。予約画面に選択欄を表示するかどうかは、下の「スタッフ選択欄の表示」で設定できます。カレンダーIDは正確に入力してください。間違えると、そのスタッフの予約が正しく登録されません。コピー＆ペーストでの入力をおすすめします。</p>
           <div id="staff-name-rows" class="staff-name-rows"></div>
           <button type="button" id="add-staff-row-btn" class="btn-add-row">＋ スタッフを追加</button>
         </div>
 
         <div class="settings-card">
           <h3 class="settings-card-title">スタッフ選択欄の表示</h3>
-          <p class="settings-card-note">お客様の予約画面に、担当スタッフを選ぶ欄を表示するかどうかを設定します。※スタッフが1人も登録されていない場合は、このチェックの状態に関わらず表示されません。</p>
+          <p class="settings-card-note">お客様の予約画面に、担当スタッフを選ぶ欄を表示するかどうかを設定します。スタッフが1人も登録されていない場合は、チェックの状態に関わらず表示されません。</p>
           <div class="form-group checkbox-group">
             <label><input type="checkbox" id="s4-show-staff-selector"> スタッフ選択欄を表示する</label>
           </div>
@@ -499,9 +499,9 @@
         </div>
 
         <div class="settings-card">
-          <h3 class="settings-card-title">予約サイト自体のURL</h3>
+          <h3 class="settings-card-title">予約サイトURL</h3>
           <div class="form-group">
-            <p class="settings-card-note">キャンセル待ちの「空きが出ました」メールなど、お客様に予約サイトへのリンクを送る際に使うURLです（例：https://simozuru.github.io/sis/）。「レイアウト」タブの「トップページに戻るボタン」（サロンの公式ホームページ等に戻るためのボタン）とは別の設定です。</p>
+            <p class="settings-card-note">お客様が予約するときに開く、予約サイトのURLを入力してください。キャンセル待ちの「空きが出ました」メールなどで、予約サイトへのリンクとして使用します。</p>
             <input type="text" id="s2-reservation-site-url" placeholder="https://example.github.io/sis/">
           </div>
         </div>
@@ -516,14 +516,14 @@
         <div class="settings-card">
           <h3 class="settings-card-title">サロン名（Googleカレンダー・メール件名で使用）</h3>
           <div class="form-group">
-            <p class="settings-card-note">お客様がGoogleカレンダーに追加した際の予定名（例：カット（○○サロン））と、予約確定・仮予約メールの件名（例：【○○サロン、ご予約を承りました】）に使われます。未入力の場合は、それぞれ「サロン予約」「当サロン」と表示されます。</p>
+            <p class="settings-card-note">Googleカレンダーの予定名や、予約確定・仮予約メールの件名に使用するサロン名を入力してください。未入力の場合は「サロン予約」「当サロン」と表示されます。</p>
             <input type="text" id="s2-calendar-salon-name" placeholder="例：○○サロン">
           </div>
         </div>
 
         <div class="settings-card">
           <h3 class="settings-card-title">予約確定メール：ヘッダー・フッター文言</h3>
-          <p class="settings-card-note">「ご予約内容」の部分（日時・メニューなど）は固定表示で、編集できません。</p>
+          <p class="settings-card-note">「ご予約内容」の部分（日時・メニューなど）は固定表示のため、編集できません。</p>
           <div class="form-group">
             <label for="s2-mail-header">ヘッダー（本文の冒頭に入る文章）</label>
             <textarea id="s2-mail-header" rows="4" placeholder="この度はご予約いただきありがとうございます。"></textarea>
@@ -536,13 +536,13 @@
 
         <div class="settings-card">
           <h3 class="settings-card-title">来店後のお礼メール（口コミ・クチコミ導線）</h3>
-          <p class="settings-card-note">任意で来店日から指定した日数後に、お客様へお礼メールを自動送信します。Googleクチコミ投稿ページのURLを記載する事で口コミへのご案内ができます。</p>
+          <p class="settings-card-note">来店日から指定した日数後に、お客様へお礼メールを自動送信できます。Googleクチコミ投稿ページのURLを設定すると、口コミをご案内できます。</p>
           <div class="form-group checkbox-group">
             <label><input type="checkbox" id="s2-thankyou-enabled"> 来店後のお礼メールを送る</label>
           </div>
           <div class="form-group">
             <label for="s2-thankyou-days">来店日から何日後に送るか</label>
-            <p class="settings-card-note">0を入力すると、来店当日に送信します。</p>
+            <p class="settings-card-note">0を入力すると、来店日の夜に送信します。</p>
             <input type="number" id="s2-thankyou-days" min="0" placeholder="例：1">
           </div>
           <div class="form-group">
@@ -596,8 +596,11 @@
         <div class="settings-card">
           <h3 class="settings-card-title">左上部、店名・ロゴ</h3>
           <div class="form-group">
-            <label for="s3-shop-name">店舗名（未入力「SIS Web Reservation」が表示）</label>
+            <label for="s3-shop-name">店舗名</label>
             <input type="text" id="s3-shop-name" placeholder="例：美容室〇〇">
+          </div>
+          <div class="form-group checkbox-group">
+            <label><input type="checkbox" id="s3-show-default-shopname"> 店舗名が未入力のとき、デフォルトの「SIS Web Reservation」を表示する</label>
           </div>
           <div class="form-group">
             <label for="s3-logo-url">ロゴ画像のURL（未入力表示なし）</label>
@@ -820,7 +823,7 @@
     </section>
 
     <section id="tab-retention" class="tab-page" style="display: none;">
-      <h2 class="section-title">保存期間</h2>
+      <h2 class="section-title">保存期間（未入力の場合は全て12ヶ月です）</h2>
 
       <div id="retention-loading" class="settings-loading">読み込み中...</div>
       <div id="retention-error" class="report-error" style="display: none;"></div>
@@ -829,41 +832,41 @@
       <form id="retention-form" style="display: none;">
 
         <div class="settings-card">
-          <h3 class="settings-card-title">予約履歴の保持期間</h3>
+          <h3 class="settings-card-title">予約履歴の保存期間</h3>
           <div class="form-group">
-            <p class="settings-card-note">何ヶ月分の予約履歴をデータで残すか（未入力の場合は12ヶ月）</p>
+            <p class="settings-card-note">何ヶ月分の予約履歴をデータとして残すかを設定します。</p>
             <input type="number" id="ret-history-retention" min="1" placeholder="12">
           </div>
         </div>
 
         <div class="settings-card">
-          <h3 class="settings-card-title">キャンセル履歴の保持期間</h3>
+          <h3 class="settings-card-title">キャンセル履歴の保存期間</h3>
           <div class="form-group">
-            <p class="settings-card-note">誰が・いつ・何をキャンセルしたかの記録を、何ヶ月分残すか（未入力の場合は12ヶ月）</p>
+            <p class="settings-card-note">誰が・いつ・何をキャンセルしたかの記録を、何ヶ月分残すかを設定します。</p>
             <input type="number" id="ret-cancel-history-retention" min="1" placeholder="12">
           </div>
         </div>
 
         <div class="settings-card">
-          <h3 class="settings-card-title">キャンセル待ちの保持期間</h3>
+          <h3 class="settings-card-title">キャンセル待ちの保存期間</h3>
           <div class="form-group">
-            <p class="settings-card-note">登録日時から数えて、キャンセル待ちのデータを何ヶ月分残すか（未入力の場合は12ヶ月）</p>
+            <p class="settings-card-note">登録日時から、キャンセル待ちのデータを何ヶ月分残すかを設定します。</p>
             <input type="number" id="ret-waitlist-retention" min="1" placeholder="12">
           </div>
         </div>
 
         <div class="settings-card">
-          <h3 class="settings-card-title">カレンダー変更履歴の保持期間</h3>
+          <h3 class="settings-card-title">カレンダー変更履歴の保存期間</h3>
           <div class="form-group">
-            <p class="settings-card-note">Googleカレンダー上での直接編集の記録を、何ヶ月分残すか（未入力の場合は12ヶ月）</p>
+            <p class="settings-card-note">Googleカレンダー上での直接編集の記録を、何ヶ月分残すかを設定します。</p>
             <input type="number" id="ret-calendar-history-retention" min="1" placeholder="12">
           </div>
         </div>
 
         <div class="settings-card">
-          <h3 class="settings-card-title">設定変更履歴の保持期間</h3>
+          <h3 class="settings-card-title">設定変更履歴の保存期間</h3>
           <div class="form-group">
-            <p class="settings-card-note">管理画面から「誰が・いつ・何を変更したか」の記録を、何ヶ月分残すか（未入力の場合は12ヶ月）</p>
+            <p class="settings-card-note">管理画面から「誰が・いつ・何を変更したか」の記録を、何ヶ月分残すかを設定します。</p>
             <input type="number" id="ret-settings-history-retention" min="1" placeholder="12">
           </div>
         </div>
